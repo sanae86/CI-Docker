@@ -5,7 +5,7 @@ pipeline {
   NEXUS_VERSION = "nexus3"
   // This can be http or https
   NEXUS_PROTOCOL = "http"
-  // Where your Nexus is running. In my case:
+  // Where your Nexus is running. on a container.
   NEXUS_URL = "http://localhost"
   NEXUS_PORT = "8081"
   // Repository where we will upload the artifact
@@ -13,8 +13,6 @@ pipeline {
   // Jenkins credential id to authenticate to Nexus OSS
   NEXUS_CREDENTIAL_ID = "nexus-credentials"
   /* 
-    Windows: set the ip address of docker host. In my case 192.168.99.100.
-    to obtains this address : $ docker-machine ip
     Linux: set localhost to SONARQUBE_URL
   */
   SONARQUBE_URL = "http://localhost"
@@ -66,6 +64,7 @@ pipeline {
     }
    }
   }
+  /*
   stage('Unit Tests') {
    when {
     anyOf { branch 'master'; branch 'develop' }
@@ -122,6 +121,7 @@ pipeline {
        reuseNode true
       }
      }
+	*/
      steps {
       sh ' mvn pmd:pmd'
       // using pmd plugin
@@ -250,7 +250,7 @@ pipeline {
         REPO_VERSION=$(cat tmp4) &&
 
         export APP_SRC_URL="http://${NEXUS_URL}/repository/maven-snapshots/${repoPath}/${version}/${APP_NAME}-${REPO_VERSION}.war" &&
-        ansible-playbook -v -i ./ansible_provisioning/hosts --extra-vars "host=staging" ./ansible_provisioning/playbook.yml 
+        ansible-playbook -v -i ./ansible/hosts --extra-vars "host=staging" ./ansible/playbook.yml 
 
        '''
      }
@@ -284,7 +284,7 @@ pipeline {
         REPO_VERSION=$(cat tmp4) &&
 
         export APP_SRC_URL="http://${NEXUS_URL}/repository/maven-snapshots/${repoPath}/${version}/${APP_NAME}-${REPO_VERSION}.war" &&
-        ansible-playbook -v -i ./ansible_provisioning/hosts --extra-vars "host=production" ./ansible_provisioning/playbook.yml 
+        ansible-playbook -v -i ./ansible/hosts --extra-vars "host=production" ./ansible/playbook.yml 
 
        '''
      }

@@ -64,7 +64,7 @@ pipeline {
     }
    }
   }
-  /*
+  
   stage('Unit Tests') {
    when {
     anyOf { branch 'master'; branch 'develop' }
@@ -121,7 +121,6 @@ pipeline {
        reuseNode true
       }
      }
-	*/
      steps {
       sh ' mvn pmd:pmd'
       // using pmd plugin
